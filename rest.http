@@ -1,0 +1,138 @@
+@rootUrl= http://localhost:3000/api/v1
+
+@authUrl = {{rootUrl}}/auth
+@userUrL =  {{rootUrl}}/users
+@adminUserUrl = {{userUrL}}/all
+@adminAddUserUrl = {{userUrL}}/add
+@bookURL =  {{rootUrl}}/books
+@borrowUrl= {{rootUrl}}/borrows
+
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc3NDY2NzM5NSwiZXhwIjoxNzc3MjU5Mzk1fQ.ewI8UYHdrIwJ7TVivCBuoAV6ma98bh_FWWFiLb01EB8
+
+
+
+### 
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+    "firstName": "role",
+    "lastName": "Doe",
+    "email": "role3@example.com",
+    "password": "123456",
+    "confirmPassword": "123456",
+    "phone": "0400000000"
+}
+
+###
+POST {{authUrl}}/verify
+Content-Type: application/json
+
+{
+    "email": "role@example.com",
+    "token" : 480073
+}
+
+
+### 
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "1234"
+}
+
+###
+GET  {{userUrL}}
+Authorization: {{token}}
+
+
+###
+# book management Api
+
+POST {{bookURL}}
+Content-Type: application/json
+Authorization:{{token}}
+
+{
+  "title": "",
+  "author": "Author 1",
+  "thumbnail": "https://your-s3-bucket-url.com/book1.jpg",
+  "isbn": "90901",
+  "genre": "Technology",
+  "publicationYear": 2024,
+  "isAvailable": true,
+  "status": "active",
+  "averageRating": 4.5
+}
+
+###
+# Get all books (auth required)
+GET {{bookURL}}
+Authorization: {{token}}
+
+###
+# Get all public books (no auth required)
+GET {{bookURL}}/public
+Authorization: {{token}}
+
+###
+PATCH {{bookURL}}/69be0ca9d05b4537db847183
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "title": "The Silent",
+  "publicationYear": 2025
+}
+
+###
+# Delete a book by ID (auth required)
+DELETE {{bookURL}}/69be0ca9d05b4537db847183
+Authorization: {{token}}
+
+###
+GET {{adminUserUrl}}
+Authorization: {{token}}
+
+
+###
+POST {{adminAddUserUrl}}
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "password123",
+    "phone": "0400000000",
+    "role": "student"
+}
+
+### Borrow Management
+# Create Borrow History
+@borrowBookId=69bf2540d17dfbfdb8fef580
+POST {{borrowUrl}}/{{borrowBookId}}
+Authorization: {{token}}
+
+# get all borrowed books
+###
+GET {{borrowUrl}}
+Authorization: {{token}}
+
+###
+GET {{borrowUrl}}/my-borrows
+Authorization: {{token}}
+
+###
+# Return Book
+PATCH {{borrowUrl}}/return
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "_id": "69c72f072127b2bd5475bc41",
+    "status": "returned"
+}

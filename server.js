@@ -22,7 +22,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   return res.send({
     status: "success",
-    message: "Financial Tracker API",
+    message: "LMS API",
   });
 });
 
